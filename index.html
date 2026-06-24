@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>利益計算</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page-shell">
+    <section class="calculator" aria-labelledby="appTitle">
+      <div class="title-group">
+        <div class="app-mark" aria-hidden="true">¥</div>
+        <div>
+          <p class="eyebrow">Profit</p>
+          <h1 id="appTitle">利益計算</h1>
+        </div>
+      </div>
+
+      <label class="input-field" for="targetProfit">
+        <span>利益</span>
+        <div class="yen-input">
+          <span aria-hidden="true">¥</span>
+          <input id="targetProfit" type="text" inputmode="numeric" autocomplete="off" placeholder="400">
+          <button id="clearInput" class="clear-button" type="button" aria-label="入力を消す" hidden>×</button>
+        </div>
+      </label>
+
+      <div class="result-area" aria-live="polite">
+        <span>販売価格</span>
+        <strong id="salePrice">--円</strong>
+      </div>
+
+      <dl class="breakdown">
+        <div>
+          <dt>販売手数料 10%</dt>
+          <dd id="feeAmount">--円</dd>
+        </div>
+        <div>
+          <dt>送料</dt>
+          <dd id="shippingAmount">160円</dd>
+        </div>
+        <div>
+          <dt>残る利益</dt>
+          <dd id="actualProfit">--円</dd>
+        </div>
+      </dl>
+
+      <p class="note">販売手数料は1円未満を切り捨てて計算しています。</p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
