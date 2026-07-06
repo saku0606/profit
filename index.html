@@ -26,6 +26,37 @@
         </div>
       </label>
 
+      <label class="input-field" for="shippingMethod">
+        <span>発送方法</span>
+        <select id="shippingMethod" class="shipping-select">
+          <optgroup label="ゆうゆうメルカリ便">
+            <option value="160" selected>ゆうパケットポストmini - 160円</option>
+            <option value="215">ゆうパケットポスト - 215円</option>
+            <option value="230">ゆうパケット - 230円</option>
+            <option value="455">ゆうパケットプラス - 455円</option>
+            <option value="750">ゆうパック 60サイズ - 750円</option>
+            <option value="870">ゆうパック 80サイズ - 870円</option>
+            <option value="1070">ゆうパック 100サイズ - 1,070円</option>
+            <option value="1200">ゆうパック 120サイズ - 1,200円</option>
+            <option value="1450">ゆうパック 140サイズ - 1,450円</option>
+            <option value="1700">ゆうパック 160サイズ - 1,700円</option>
+            <option value="1900">ゆうパック 170サイズ - 1,900円</option>
+          </optgroup>
+          <optgroup label="らくらくメルカリ便">
+            <option value="210">ネコポス - 210円</option>
+            <option value="450">宅急便コンパクト - 450円</option>
+            <option value="750">宅急便 60サイズ - 750円</option>
+            <option value="850">宅急便 80サイズ - 850円</option>
+            <option value="1050">宅急便 100サイズ - 1,050円</option>
+            <option value="1200">宅急便 120サイズ - 1,200円</option>
+            <option value="1450">宅急便 140サイズ - 1,450円</option>
+            <option value="1700">宅急便 160サイズ - 1,700円</option>
+            <option value="2100">宅急便 180サイズ - 2,100円</option>
+            <option value="2500">宅急便 200サイズ - 2,500円</option>
+          </optgroup>
+        </select>
+      </label>
+
       <div class="result-area" aria-live="polite">
         <span>販売価格</span>
         <strong id="salePrice">--円</strong>
@@ -46,7 +77,7 @@
         </div>
       </dl>
 
-      <p class="note">販売手数料は1円未満を切り捨てて計算しています。</p>
+      <p class="note">送料はPDFの早わかり表をもとにしています。販売手数料は1円未満を切り捨てて計算しています。</p>
     </section>
   </main>
 
