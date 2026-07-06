@@ -27,7 +27,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -129,6 +130,29 @@ h1 {
 
 .yen-input input::placeholder {
   color: #b7bdc8;
+}
+
+.shipping-select {
+  width: 100%;
+  min-height: 54px;
+  padding: 0 42px 0 16px;
+  border: 2px solid #d6dbe3;
+  border-radius: 8px;
+  background:
+    linear-gradient(45deg, transparent 50%, #555f6f 50%) calc(100% - 22px) 50% / 7px 7px no-repeat,
+    linear-gradient(135deg, #555f6f 50%, transparent 50%) calc(100% - 17px) 50% / 7px 7px no-repeat,
+    #fff;
+  color: var(--text);
+  font-weight: 800;
+  outline: 0;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.shipping-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(233, 61, 79, 0.12);
 }
 
 .clear-button {
