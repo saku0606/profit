@@ -1,14 +1,14 @@
 const FEE_RATE = 0.1;
-const SHIPPING_YEN = 160;
 
 const targetProfitInput = document.getElementById("targetProfit");
+const shippingMethodSelect = document.getElementById("shippingMethod");
 const clearInputButton = document.getElementById("clearInput");
 const salePrice = document.getElementById("salePrice");
 const feeAmount = document.getElementById("feeAmount");
 const shippingAmount = document.getElementById("shippingAmount");
 const actualProfit = document.getElementById("actualProfit");
 
-shippingAmount.textContent = formatYen(SHIPPING_YEN);
+shippingAmount.textContent = formatYen(getShippingYen());
 
 function normalizeNumber(value) {
   return value
@@ -24,14 +24,18 @@ function getFee(price) {
   return Math.floor(price * FEE_RATE);
 }
 
-function getProfit(price) {
-  return price - getFee(price) - SHIPPING_YEN;
+function getShippingYen() {
+  return Number(shippingMethodSelect.value);
 }
 
-function getMinimumSalePrice(targetProfit) {
-  let price = Math.max(0, Math.floor((targetProfit + SHIPPING_YEN) / (1 - FEE_RATE)) - 10);
+function getProfit(price, shippingYen) {
+  return price - getFee(price) - shippingYen;
+}
 
-  while (getProfit(price) < targetProfit) {
+function getMinimumSalePrice(targetProfit, shippingYen) {
+  let price = Math.max(0, Math.floor((targetProfit + shippingYen) / (1 - FEE_RATE)) - 10);
+
+  while (getProfit(price, shippingYen) < targetProfit) {
     price += 1;
   }
 
@@ -47,6 +51,9 @@ function showEmptyResult() {
 
 function updateCalculator() {
   const normalizedValue = normalizeNumber(targetProfitInput.value);
+  const shippingYen = getShippingYen();
+
+  shippingAmount.textContent = formatYen(shippingYen);
 
   if (targetProfitInput.value !== normalizedValue) {
     targetProfitInput.value = normalizedValue;
@@ -58,9 +65,9 @@ function updateCalculator() {
   }
 
   const targetProfit = Number(normalizedValue);
-  const minimumSalePrice = getMinimumSalePrice(targetProfit);
+  const minimumSalePrice = getMinimumSalePrice(targetProfit, shippingYen);
   const fee = getFee(minimumSalePrice);
-  const profit = getProfit(minimumSalePrice);
+  const profit = getProfit(minimumSalePrice, shippingYen);
 
   salePrice.textContent = formatYen(minimumSalePrice);
   feeAmount.textContent = formatYen(fee);
@@ -69,6 +76,7 @@ function updateCalculator() {
 }
 
 targetProfitInput.addEventListener("input", updateCalculator);
+shippingMethodSelect.addEventListener("change", updateCalculator);
 
 clearInputButton.addEventListener("click", () => {
   targetProfitInput.value = "";
