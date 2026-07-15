@@ -1,15 +1,5 @@
 const FEE_RATE = 0.1;
 
-const targetProfitInput = document.getElementById("targetProfit");
-const shippingMethodSelect = document.getElementById("shippingMethod");
-const clearInputButton = document.getElementById("clearInput");
-const salePrice = document.getElementById("salePrice");
-const feeAmount = document.getElementById("feeAmount");
-const shippingAmount = document.getElementById("shippingAmount");
-const actualProfit = document.getElementById("actualProfit");
-
-shippingAmount.textContent = formatYen(getShippingYen());
-
 function normalizeNumber(value) {
   return value
     .replace(/[０-９]/g, (digit) => String.fromCharCode(digit.charCodeAt(0) - 0xfee0))
@@ -22,10 +12,6 @@ function formatYen(value) {
 
 function getFee(price) {
   return Math.floor(price * FEE_RATE);
-}
-
-function getShippingYen() {
-  return Number(shippingMethodSelect.value);
 }
 
 function getProfit(price, shippingYen) {
@@ -42,46 +28,104 @@ function getMinimumSalePrice(targetProfit, shippingYen) {
   return price;
 }
 
-function showEmptyResult() {
-  salePrice.textContent = "--円";
-  feeAmount.textContent = "--円";
-  actualProfit.textContent = "--円";
-  clearInputButton.hidden = true;
+// ---- 画面切り替え ----
+const screens = document.querySelectorAll("main > section");
+
+function showScreen(id) {
+  screens.forEach((screen) => {
+    screen.hidden = screen.id !== id;
+  });
 }
 
-function updateCalculator() {
-  const normalizedValue = normalizeNumber(targetProfitInput.value);
-  const shippingYen = getShippingYen();
-
-  shippingAmount.textContent = formatYen(shippingYen);
-
-  if (targetProfitInput.value !== normalizedValue) {
-    targetProfitInput.value = normalizedValue;
-  }
-
-  if (normalizedValue === "") {
-    showEmptyResult();
-    return;
-  }
-
-  const targetProfit = Number(normalizedValue);
-  const minimumSalePrice = getMinimumSalePrice(targetProfit, shippingYen);
-  const fee = getFee(minimumSalePrice);
-  const profit = getProfit(minimumSalePrice, shippingYen);
-
-  salePrice.textContent = formatYen(minimumSalePrice);
-  feeAmount.textContent = formatYen(fee);
-  actualProfit.textContent = formatYen(profit);
-  clearInputButton.hidden = false;
-}
-
-targetProfitInput.addEventListener("input", updateCalculator);
-shippingMethodSelect.addEventListener("change", updateCalculator);
-
-clearInputButton.addEventListener("click", () => {
-  targetProfitInput.value = "";
-  targetProfitInput.focus();
-  showEmptyResult();
+document.querySelectorAll("[data-target]").forEach((button) => {
+  button.addEventListener("click", () => showScreen(button.dataset.target));
 });
 
-showEmptyResult();
+// ---- 計算画面の共通セットアップ ----
+function setupCalculator({ inputEl, selectEl, clearEl, render, clear }) {
+  function update() {
+    const normalizedValue = normalizeNumber(inputEl.value);
+
+    if (inputEl.value !== normalizedValue) {
+      inputEl.value = normalizedValue;
+    }
+
+    const shippingYen = Number(selectEl.value);
+
+    if (normalizedValue === "") {
+      clear(shippingYen);
+      clearEl.hidden = true;
+      return;
+    }
+
+    render(Number(normalizedValue), shippingYen);
+    clearEl.hidden = false;
+  }
+
+  inputEl.addEventListener("input", update);
+  selectEl.addEventListener("change", update);
+
+  clearEl.addEventListener("click", () => {
+    inputEl.value = "";
+    inputEl.focus();
+    update();
+  });
+
+  update();
+}
+
+// ---- 利益 → 販売価格 ----
+const salePrice = document.getElementById("salePrice");
+const feeAmount = document.getElementById("feeAmount");
+const shippingAmount = document.getElementById("shippingAmount");
+const actualProfit = document.getElementById("actualProfit");
+
+setupCalculator({
+  inputEl: document.getElementById("targetProfit"),
+  selectEl: document.getElementById("shippingMethod"),
+  clearEl: document.getElementById("clearInput"),
+  render(targetProfit, shippingYen) {
+    const minimumSalePrice = getMinimumSalePrice(targetProfit, shippingYen);
+
+    salePrice.textContent = formatYen(minimumSalePrice);
+    feeAmount.textContent = formatYen(getFee(minimumSalePrice));
+    shippingAmount.textContent = formatYen(shippingYen);
+    actualProfit.textContent = formatYen(getProfit(minimumSalePrice, shippingYen));
+  },
+  clear(shippingYen) {
+    salePrice.textContent = "--円";
+    feeAmount.textContent = "--円";
+    shippingAmount.textContent = formatYen(shippingYen);
+    actualProfit.textContent = "--円";
+  },
+});
+
+// ---- 販売価格 → 利益 ----
+const profitResultArea = document.getElementById("profitResultArea");
+const profitResultLabel = document.getElementById("profitResultLabel");
+const profitResult = document.getElementById("profitResult");
+const feeAmountB = document.getElementById("feeAmountB");
+const shippingAmountB = document.getElementById("shippingAmountB");
+
+setupCalculator({
+  inputEl: document.getElementById("salePriceInput"),
+  selectEl: document.getElementById("shippingMethodB"),
+  clearEl: document.getElementById("clearInputB"),
+  render(price, shippingYen) {
+    const profit = getProfit(price, shippingYen);
+    const isLoss = profit < 0;
+
+    profitResult.textContent = formatYen(profit);
+    feeAmountB.textContent = formatYen(getFee(price));
+    shippingAmountB.textContent = formatYen(shippingYen);
+    profitResultArea.classList.toggle("is-loss", isLoss);
+    profitResultLabel.textContent = isLoss ? "手元に残る利益（赤字）" : "手元に残る利益";
+  },
+  clear(shippingYen) {
+    profitResult.textContent = "--円";
+    feeAmountB.textContent = "--円";
+    shippingAmountB.textContent = formatYen(shippingYen);
+    profitResultArea.classList.remove("is-loss");
+    profitResultLabel.textContent = "手元に残る利益";
+  },
+});
