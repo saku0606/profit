@@ -1,15 +1,14 @@
 :root {
-  --bg: #f7f8fa;
+  --brand: #e0322d;
+  --brand-dark: #b9251f;
+  --brand-tint: #fdeeed;
+  --green: #0f875b;
+  --text: #24292f;
+  --muted: #737a82;
+  --border: #e2e5e9;
+  --border-strong: #cfd4da;
+  --bg: #f5f6f8;
   --panel: #ffffff;
-  --text: #1e2228;
-  --muted: #6b7280;
-  --line: #e5e7eb;
-  --accent: #e93d4f;
-  --accent-strong: #c9253b;
-  --profit: #117a59;
-  --soft-red: #fff1f3;
-  --soft-green: #edf9f4;
-  --shadow: 0 18px 50px rgba(30, 34, 40, 0.08);
 }
 
 * {
@@ -19,263 +18,364 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(233, 61, 79, 0.1), transparent 30rem),
-    linear-gradient(180deg, #ffffff 0%, var(--bg) 54%);
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Yu Gothic UI", sans-serif;
+  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
 button,
 input,
 select {
   font: inherit;
+  color: inherit;
 }
 
-.page-shell {
-  width: min(100%, 720px);
-  min-height: 100vh;
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* ---- ヘッダー ---- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.site-header-inner {
+  max-width: 680px;
   margin: 0 auto;
-  padding: 48px 20px;
-  display: grid;
-  place-items: center;
-}
-
-.calculator {
-  width: 100%;
-  padding: 28px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: var(--shadow);
-}
-
-.title-group {
+  padding: 0 16px;
+  height: 52px;
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 28px;
 }
 
-.app-mark {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-mark {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
   display: grid;
   place-items: center;
-  background: var(--soft-red);
-  color: var(--accent);
-  font-size: 28px;
-  font-weight: 800;
-}
-
-.eyebrow {
-  margin: 0 0 4px;
-  color: var(--accent);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-
-h1 {
-  margin: 0;
-  font-size: clamp(28px, 6vw, 42px);
-  line-height: 1.12;
-  letter-spacing: 0;
-}
-
-.input-field {
-  display: grid;
-  gap: 10px;
-  margin-bottom: 22px;
-  color: var(--muted);
+  background: var(--brand);
+  color: #fff;
   font-size: 15px;
   font-weight: 700;
 }
 
-.yen-input {
-  min-height: 64px;
+.brand-name {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+/* ---- レイアウト ---- */
+
+.page {
+  flex: 1;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 28px 16px 56px;
+}
+
+/* ---- ページ見出し ---- */
+
+.hero {
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  line-height: 1.4;
+}
+
+.hero p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13.5px;
+}
+
+/* ---- ツールパネル ---- */
+
+.tool-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.tabs {
+  display: flex;
+  background: #fafbfc;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  flex: 1;
+  position: relative;
+  padding: 13px 8px;
+  border: 0;
+  background: none;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.tab.is-active {
+  color: var(--text);
+  background: var(--panel);
+}
+
+.tab.is-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--brand);
+}
+
+button.tab:hover {
+  color: var(--text);
+}
+
+.tool-body {
+  padding: 24px 20px 20px;
+}
+
+/* ---- フォーム ---- */
+
+.field {
+  margin-bottom: 18px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.text-input {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 0 14px 0 18px;
-  border: 2px solid #d6dbe3;
-  border-radius: 8px;
-  background: #fff;
-  color: var(--accent);
-  transition: border-color 160ms ease, box-shadow 160ms ease;
+  gap: 8px;
+  height: 46px;
+  padding: 0 12px;
+  background: var(--panel);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.yen-input:focus-within {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(233, 61, 79, 0.12);
+.text-input:focus-within {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(224, 50, 45, 0.12);
 }
 
-.yen-input > span {
-  font-size: 24px;
-  font-weight: 900;
-}
-
-.yen-input input {
-  width: 100%;
+.text-input input {
+  flex: 1;
   min-width: 0;
   border: 0;
   outline: 0;
-  color: var(--text);
-  font-size: 30px;
-  font-weight: 800;
-  letter-spacing: 0;
+  background: none;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: right;
 }
 
-.yen-input input::placeholder {
-  color: #b7bdc8;
+.text-input input::placeholder {
+  color: #b6bcc4;
+  font-weight: 500;
 }
 
-.shipping-select {
-  width: 100%;
-  min-height: 54px;
-  padding: 0 42px 0 16px;
-  border: 2px solid #d6dbe3;
-  border-radius: 8px;
-  background:
-    linear-gradient(45deg, transparent 50%, #555f6f 50%) calc(100% - 22px) 50% / 7px 7px no-repeat,
-    linear-gradient(135deg, #555f6f 50%, transparent 50%) calc(100% - 17px) 50% / 7px 7px no-repeat,
-    #fff;
-  color: var(--text);
-  font-weight: 800;
-  outline: 0;
-  appearance: none;
-  cursor: pointer;
-  transition: border-color 160ms ease, box-shadow 160ms ease;
-}
-
-.shipping-select:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(233, 61, 79, 0.12);
+.unit {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .clear-button {
-  width: 36px;
-  height: 36px;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  padding: 0;
   border: 0;
   border-radius: 50%;
-  background: #eef0f4;
-  color: #555f6f;
-  cursor: pointer;
-  font-size: 24px;
+  background: #c6ccd4;
+  color: #fff;
+  font-size: 13px;
   line-height: 1;
 }
 
 .clear-button:hover {
-  background: #e2e5ea;
+  background: #a9b1bb;
 }
 
-.result-area {
-  margin: 0 -8px 22px;
-  padding: 22px;
+.field select {
+  width: 100%;
+  height: 46px;
+  padding: 0 36px 0 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: #fff url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23737a82' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") right 12px center / 14px no-repeat;
+  font-size: 14px;
+  font-weight: 600;
+  appearance: none;
+  outline: 0;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field select:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(224, 50, 45, 0.12);
+}
+
+/* ---- 計算結果 ---- */
+
+.result-card {
+  margin-top: 22px;
+  padding: 14px 16px 6px;
+  background: #fafbfc;
+  border: 1px solid var(--border);
   border-radius: 8px;
-  background: var(--soft-green);
-  border: 1px solid rgba(17, 122, 89, 0.2);
-  display: grid;
-  gap: 6px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
-.result-area span {
-  color: var(--profit);
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.result-area strong {
-  color: var(--profit);
-  font-size: clamp(38px, 11vw, 68px);
-  line-height: 1;
-  letter-spacing: 0;
-}
-
-.breakdown {
-  margin: 0;
-  border-top: 1px solid var(--line);
-}
-
-.breakdown div {
+.result-main {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  gap: 18px;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--line);
+  gap: 12px;
+  padding: 2px 2px 12px;
 }
 
-.breakdown dt {
-  color: var(--muted);
-  font-size: 14px;
+.result-main span {
+  font-size: 13px;
   font-weight: 700;
 }
 
-.breakdown dd {
-  margin: 0;
-  color: var(--text);
-  font-size: 18px;
-  font-weight: 900;
-  text-align: right;
+.result-main strong {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.2;
   white-space: nowrap;
 }
 
-.breakdown div:last-child dd {
-  color: var(--profit);
+.value-price {
+  color: var(--brand);
+}
+
+.value-profit {
+  color: var(--green);
+}
+
+.result-card.is-loss {
+  background: var(--brand-tint);
+  border-color: #f0c4c2;
+}
+
+.result-card.is-loss .result-main span,
+.result-card.is-loss .value-profit {
+  color: var(--brand-dark);
+}
+
+.result-details {
+  margin: 0;
+  border-top: 1px solid var(--border);
+}
+
+.result-details div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 2px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.result-details div:last-child {
+  border-bottom: 0;
+}
+
+.result-details dt {
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+.result-details dd {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .note {
-  margin: 18px 0 0;
+  margin: 14px 2px 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.7;
 }
 
-@media (max-width: 520px) {
-  .page-shell {
-    padding: 22px 12px;
-    align-items: start;
+/* ---- フッター ---- */
+
+.site-footer {
+  background: var(--panel);
+  border-top: 1px solid var(--border);
+  padding: 20px 16px 28px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.site-footer p {
+  margin: 0;
+  font-size: 11.5px;
+}
+
+.site-footer small {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+}
+
+/* ---- モバイル ---- */
+
+@media (max-width: 480px) {
+  .page {
+    padding: 20px 12px 44px;
   }
 
-  .calculator {
-    padding: 22px 16px;
+  .hero h1 {
+    font-size: 19px;
   }
 
-  .title-group {
-    gap: 12px;
-    margin-bottom: 24px;
+  .tool-body {
+    padding: 18px 14px 16px;
   }
 
-  .app-mark {
-    width: 42px;
-    height: 42px;
+  .result-main strong {
     font-size: 24px;
-  }
-
-  .yen-input {
-    min-height: 58px;
-  }
-
-  .yen-input input {
-    font-size: 26px;
-  }
-
-  .result-area {
-    margin-right: 0;
-    margin-left: 0;
-    padding: 18px;
-  }
-
-  .breakdown div {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .breakdown dd {
-    text-align: left;
   }
 }
